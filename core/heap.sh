@@ -11,20 +11,20 @@ heap_new() {
     ref="$1"
     malloc "$ref"
 
-    set_pair "$mem.value" ""
-    set_pair "$mem.left" ""
-    set_pair "$mem.right" ""
+    map_set "$mem.value" ""
+    map_set "$mem.left" ""
+    map_set "$mem.right" ""
 }
 
 heap_set() {
     node="$1"
     value="$2"
-    set_pair "$node.value" "$value"
+    map_set "$node.value" "$value"
 }
 
 heap_get() {
     node="$1"
-    get_val "$node.value"
+    map_get "$node.value"
 }
 
 heap_insert() {
@@ -45,16 +45,16 @@ heap_insert() {
         curr_val="$(heap_get "$curr")"
 
         if [ -n "$curr_val" ] && [ "$value" -lt "$curr_val" ]; then
-            left="$(get_val "$curr.left")"
+            left="$(map_get "$curr.left")"
             if [ -z "$left" ]; then
-                set_pair "$curr.left" "$new_node"
+                map_set "$curr.left" "$new_node"
                 return
             fi
             curr="$left"
         else
-            right="$(get_val "$curr.right")"
+            right="$(map_get "$curr.right")"
             if [ -z "$right" ]; then
-                set_pair "$curr.right" "$new_node"
+                map_set "$curr.right" "$new_node"
                 return
             fi
             curr="$right"
@@ -65,9 +65,9 @@ heap_insert() {
 heap_inorder() {
     node="$1"
     if [ -n "$node" ]; then
-        heap_inorder "$(get_val "$node.left")"
+        heap_inorder "$(map_get "$node.left")"
         printf "%s " "$(heap_get "$node")"
-        heap_inorder "$(get_val "$node.right")"
+        heap_inorder "$(map_get "$node.right")"
     fi
 }
 
@@ -79,19 +79,19 @@ heap_insert "root" 10
 heap_insert "root" 60
 
 printf "Root: %s\n" "$(heap_get "$root")"
-left="$(get_val "$root.left")"
+left="$(map_get "$root.left")"
 printf "Left: %s\n" "$(heap_get "$left")"
 
-right="$(get_val "$root.right")"
+right="$(map_get "$root.right")"
 printf "Right: %s\n" "$(heap_get "$right")"
 
-left_left="$(get_val "$left.left")"
+left_left="$(map_get "$left.left")"
 printf "Left Left: %s\n" "$(heap_get "$left_left")"
 
-left_right="$(get_val "$left.right")"
+left_right="$(map_get "$left.right")"
 printf "Left Right: %s\n" "$(heap_get "$left_right")"
 
-right_right="$(get_val "$right.right")"
+right_right="$(map_get "$right.right")"
 printf "Right Right: %s\n" "$(heap_get "$right_right")"
 
-echo "$map" > data
+echo "$map" >data

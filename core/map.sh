@@ -6,19 +6,19 @@ key_exists() {
   key="$1"
   printf "%s\n" "$map" | grep -q "^${key}="
 }
-delete_pair() {
+map_del() {
   key="$1"
   map="$(printf "%s\n" "$map" | { grep -v "^${key}=" || true; })"
 }
-set_pair() {
+map_set() {
   key="$1"
   value="$2"
-  
+
   value="${value//$'\n'/␤}"  # Replace newlines with ␤
-  key_exists "$key" && delete_pair "$key"
+  key_exists "$key" && map_del "$key"
   map="$(printf "%s\n%s=%s" "$map" "$key" "$value")"
 }
-get_val() {
+map_get() {
   key="$1"
 
   printf "%s\n" "$map" | {

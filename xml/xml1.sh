@@ -5,7 +5,7 @@ __imports=""
 import() {
     file="$1"
     case "$__imports" in
-        *"|$file|"*) return ;;
+    *"|$file|"*) return ;;
     esac
     __imports="$__imports|$file|"
 
@@ -33,36 +33,36 @@ xml_lexer() {
         xml="${xml#?}"
 
         case "$first" in
-            '<')
-                if [ -n "$xml_token" ]; then
-                    malloc xml_node
-                    object_set "$xml_node" "value" "$xml_token"
-                    list_append "$list" "$xml_node"
-                    xml_token=""
-                fi
-                xml_token="$first"
-                ;;
-
-            '>')
-                xml_token="$xml_token$first"
+        '<')
+            if [ -n "$xml_token" ]; then
                 malloc xml_node
                 object_set "$xml_node" "value" "$xml_token"
                 list_append "$list" "$xml_node"
                 xml_token=""
-                ;;
+            fi
+            xml_token="$first"
+            ;;
 
-            '')
-                if [ -n "$xml_token" ]; then
-                    malloc xml_node
-                    object_set "$xml_node" "value" "$xml_token"
-                    list_append "$list" "$xml_node"
-                fi
-                break
-                ;;
+        '>')
+            xml_token="$xml_token$first"
+            malloc xml_node
+            object_set "$xml_node" "value" "$xml_token"
+            list_append "$list" "$xml_node"
+            xml_token=""
+            ;;
 
-            *)
-                xml_token="$xml_token$first"
-                ;;
+        '')
+            if [ -n "$xml_token" ]; then
+                malloc xml_node
+                object_set "$xml_node" "value" "$xml_token"
+                list_append "$list" "$xml_node"
+            fi
+            break
+            ;;
+
+        *)
+            xml_token="$xml_token$first"
+            ;;
         esac
     done
 }
@@ -72,9 +72,9 @@ xml_tokens_debug() {
     curr="$list_head"
 
     while [ -n "$curr" ]; do
-        xml_value="$(get_val "$curr.value")"
-        curr="$(get_val "$curr.pointer")"
-        [ -z "$xml_value" ] && continue        
+        xml_value="$(map_get "$curr.value")"
+        curr="$(map_get "$curr.pointer")"
+        [ -z "$xml_value" ] && continue
         printf "[%s]\n" "$xml_value"
     done
 }

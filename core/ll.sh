@@ -10,15 +10,15 @@ object_get_pointer() {
     object_get "$obj" "pointer"
 }
 object_del_pointer() {
-  obj="$1"
-  delete_pair "$obj.pointer"
+    obj="$1"
+    map_del "$obj.pointer"
 }
 
 list_find_and_modify() {
     list_head="$1"
     target="$2"
     new="$3"
-    mode="$4"  # "append", "before", or "after"
+    mode="$4" # "append", "before", or "after"
 
     curr="$list_head"
     prev=""
@@ -31,21 +31,21 @@ list_find_and_modify() {
 
         if [ "$curr" = "$target" ]; then
             case "$mode" in
-                "before")
-                    object_set_pointer "$new" "$curr"
-                    if [ -n "$prev" ]; then
-                        object_set_pointer "$prev" "$new"
-                    else
-                        eval "$list_head='$new'"
-                    fi
-                    return 0
-                    ;;
-                "after")
-                    next="$(object_get_pointer "$curr")"
-                    object_set_pointer "$new" "$next"
-                    object_set_pointer "$curr" "$new"
-                    return 0
-                    ;;
+            "before")
+                object_set_pointer "$new" "$curr"
+                if [ -n "$prev" ]; then
+                    object_set_pointer "$prev" "$new"
+                else
+                    eval "$list_head='$new'"
+                fi
+                return 0
+                ;;
+            "after")
+                next="$(object_get_pointer "$curr")"
+                object_set_pointer "$new" "$next"
+                object_set_pointer "$curr" "$new"
+                return 0
+                ;;
             esac
         fi
 
@@ -53,9 +53,8 @@ list_find_and_modify() {
         curr="$(object_get_pointer "$curr")"
     done
 
-    return 1  # Target not found
+    return 1 # Target not found
 }
-
 
 list_insert_before() {
     list_find_and_modify "$1" "$2" "$3" "before"
