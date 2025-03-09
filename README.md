@@ -88,7 +88,5 @@ object_set "head" "name" "First Node"
 object_set "second" "name" "Second Node"
 
 list_append "head" "$second"
-
-echo "First Node: $(object_get "head" "name")"
-echo "Second Node: $(object_get "$(object_get_pointer "head")" "name")"
+list_iterate "head"
 ```
