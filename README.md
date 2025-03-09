@@ -87,6 +87,6 @@ import "path/to/neo-core.sh/core/ll.sh"
 object_set "head" "name" "First Node"
 object_set "second" "name" "Second Node"
 
-list_append "head" "$second"
+list_append "head" "second"
 list_iterate "head"
 ```
