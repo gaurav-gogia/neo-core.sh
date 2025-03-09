@@ -84,11 +84,11 @@ import "path/to/neo-core.sh/core/map.sh"
 import "path/to/neo-core.sh/core/obj.sh"
 import "path/to/neo-core.sh/core/ll.sh"
 
-object_set "$head" "name" "First Node"
-object_set "$second" "name" "Second Node"
+object_set "head" "name" "First Node"
+object_set "second" "name" "Second Node"
 
-list_append "$head" "$second"
+list_append "head" "$second"
 
-echo "First Node: $(object_get "$head" "name")"
-echo "Second Node: $(object_get "$(object_get_pointer "$head")" "name")"
+echo "First Node: $(object_get "head" "name")"
+echo "Second Node: $(object_get "$(object_get_pointer "head")" "name")"
 ```
