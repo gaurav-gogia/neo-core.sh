@@ -100,7 +100,7 @@ list_object_dump() {
     obj="$1"
     printf "%s" "$mem" | {
         grep "^$obj\." | {
-            while IFS='=' read k v; do
+            while IFS='=' read -r k v; do
                 printf "    %s=%s\n" "${k#$obj.}" "$v"
             done
         }

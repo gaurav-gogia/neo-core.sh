@@ -23,7 +23,7 @@ set_key() {
 keys() {
   printf "keys:\n"
   printf "$map" | {
-    while IFS='=' read k v || [ -n "$k" ]; do
+    while IFS='=' read -r k _ || [ -n "$k" ]; do
       [ -z "$k" ] && continue
       printf "%s\n" "$k"
     done
