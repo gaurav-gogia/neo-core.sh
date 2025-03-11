@@ -27,6 +27,20 @@ path/to/neo-core.sh/core/map.sh . path/to/neo-core.sh/core/ll.sh
 Another method of sourcing these scripts would be to use `import` functions
 provided in the library.
 
+## Features
+
+### Data Structures
+
+1. Set
+2. Map
+3. Object
+4. Nested Object
+5. Linked List
+
+### Parsing
+
+1. XML
+
 ### Using Maps
 
 ```sh
