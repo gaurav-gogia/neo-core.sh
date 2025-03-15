@@ -15,7 +15,7 @@ map_set() {
   value="$2"
 
   value="${value//$'\n'/␤}"  # Replace newlines with ␤
-  map_key_exists "$key" && map_del "$ms_key"
+  map_key_exists "$ms_key" && map_del "$ms_key"
   map="$(printf "%s\n%s=%s" "$map" "$ms_key" "$value")"
 }
 map_get() {

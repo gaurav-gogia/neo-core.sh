@@ -1,9 +1,37 @@
 #!/bin/sh
+readonly OBJ_EXISTS=101
 
 object_exists() {
     oe_obj="$1"
-    printf "%s\n" "$map" | grep -q "^${oe_obj}." && return 0
+
+    printf "%s\n" "$map" | {
+        while IFS='=' read -r key _; do
+            case "$key" in
+            "$oe_obj"*) return $OBJ_EXISTS ;;
+            esac
+        done
+    }
+
+    if [ $? -eq $OBJ_EXISTS ]; then
+        return 0
+    fi
+    return 1
 }
+
+object_set_pointer() {
+    obj="$1"
+    next="$2"
+    map_set "$obj.pointer" "$next"
+}
+object_get_pointer() {
+    obj="$1"
+    map_get "$obj.pointer"
+}
+object_del_pointer() {
+    obj="$1"
+    map_del "$obj.pointer"
+}
+
 object_set() {
     obj="$1"
     key="$2"

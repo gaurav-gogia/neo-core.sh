@@ -31,9 +31,19 @@ object_set "ipl" "type" "subcompany"
 object_set "ipl" "bun" "fun"
 object_set "ipl" "wicket" 1241421251
 
-object_set "person" "affiliation" "bcci"
-object_set "bcci" "subffl" "ipl"
-
+printf "\n%s\n" "separate objects:"
 object_print "person"
+object_print "bcci"
+object_print "ipl"
+
+printf "\n%s\n" "nested objects:"
+object_set "person" "affl" "bcci"
+object_set "bcci" "subffl" "ipl"
+object_print "person"
+
+printf "\n%s\n" "test"
+object_get "person" "first_name"
+object_get "person" "affl"
+object_get "bcci" "subffl"
 
 echo "$map" >data

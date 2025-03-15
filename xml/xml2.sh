@@ -5,7 +5,7 @@ __imports=""
 import() {
     file="$1"
     case "$__imports" in
-        *"|$file|"*) return ;;
+    *"|$file|"*) return ;;
     esac
     __imports="$__imports|$file|"
 
@@ -28,7 +28,7 @@ xml_parse_attributes() {
     xml_attrs="$2"
 
     while [ -n "$xml_attrs" ]; do
-        xml_attrs="${xml_attrs# }"  # Strip leading spaces
+        xml_attrs="${xml_attrs# }" # Strip leading spaces
 
         # Extract key name
         xml_key="${xml_attrs%%=*}"
@@ -70,47 +70,46 @@ xml_lexer() {
         xml_data="${xml_data#?}"
 
         case "$xml_first" in
-            '<')
-                if [ -n "$xml_token" ]; then
-                    object_set "$xml_node" "value" "$xml_token"
-                    xml_token=""
-                fi
-                malloc xml_node
-                xml_token="$xml_first"
-                ;;
-
-            '>')
-                xml_token="$xml_token$xml_first"
-
-                # get tag name
-                xml_tagname="${xml_token#<}"
-                xml_tagname="${xml_tagname%% *}"
-                xml_tagname="${xml_tagname%%>*}"
-
-                object_set "$xml_node" "tag" "$xml_tagname"
-
-                xml_attrs="${xml_token#<}"
-                xml_attrs="${xml_attrs#${xml_tagname}}"
-                xml_attrs="${xml_attrs%>}"
-                xml_attrs="${xml_attrs# }"
-
-                xml_parse_attributes "$xml_node" "$xml_attrs"
-
-                list_append "$list" "$xml_node"
+        '<')
+            if [ -n "$xml_token" ]; then
+                object_set "$xml_node" "value" "$xml_token"
                 xml_token=""
-                ;;
+            fi
+            malloc xml_node
+            xml_token="$xml_first"
+            ;;
 
-            '')
-                break
-                ;;
+        '>')
+            xml_token="$xml_token$xml_first"
 
-            *)
-                xml_token="$xml_token$xml_first"
-                ;;
+            # get tag name
+            xml_tagname="${xml_token#<}"
+            xml_tagname="${xml_tagname%% *}"
+            xml_tagname="${xml_tagname%%>*}"
+
+            object_set "$xml_node" "tag" "$xml_tagname"
+
+            xml_attrs="${xml_token#<}"
+            xml_attrs="${xml_attrs#${xml_tagname}}"
+            xml_attrs="${xml_attrs%>}"
+            xml_attrs="${xml_attrs# }"
+
+            xml_parse_attributes "$xml_node" "$xml_attrs"
+
+            list_append "$list" "$xml_node"
+            xml_token=""
+            ;;
+
+        '')
+            break
+            ;;
+
+        *)
+            xml_token="$xml_token$xml_first"
+            ;;
         esac
     done
 }
-
 
 xml_tokens_debug() {
     list_head="$1"

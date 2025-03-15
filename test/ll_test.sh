@@ -5,7 +5,7 @@ __imports=""
 import() {
     file="$1"
     case "$__imports" in
-        *"|$file|"*) return ;;
+    *"|$file|"*) return ;;
     esac
     __imports="$__imports|$file|"
 
@@ -34,13 +34,12 @@ object_set "node2" "age" "77"
 object_set "node3" "name" "Cora"
 object_set "node3" "age" "35"
 
-
 printf "\n%s\n" "init list"
-list_append "root" "node1"
+list_append "root" "node2"
 list_iterate "root"
 
 printf "\n%s\n" "insert node1 BEFORE node2"
-list_insert_before "root" "node1" "node2"
+list_insert_before "root" "node2" "node1"
 list_iterate "root"
 
 printf "\n%s\n" "rm node2"
@@ -55,5 +54,5 @@ printf "\n%s\n" "insert node3 AFTER root"
 list_insert_after "root" "root" "node3"
 list_iterate "root"
 
-echo "$map" > data
+echo "$map" >data
 printf ""

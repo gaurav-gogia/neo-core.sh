@@ -1,19 +1,5 @@
 #!/bin/sh
 
-object_set_pointer() {
-    obj="$1"
-    next="$2"
-    object_set "$obj" "pointer" "$next"
-}
-object_get_pointer() {
-    obj="$1"
-    object_get "$obj" "pointer"
-}
-object_del_pointer() {
-    obj="$1"
-    map_del "$obj.pointer"
-}
-
 list_find_and_modify() {
     list_head="$1"
     target="$2"

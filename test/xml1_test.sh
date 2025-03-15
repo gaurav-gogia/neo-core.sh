@@ -5,7 +5,7 @@ __imports=""
 import() {
     file="$1"
     case "$__imports" in
-        *"|$file|"*) return ;;
+    *"|$file|"*) return ;;
     esac
     __imports="$__imports|$file|"
 
@@ -24,7 +24,7 @@ import "../xml/xml1.sh"
 # xml_lexer "xml" "$data"
 # xml_lexer "xml" "<user blin="catfun" ok=1>
 #     OK
-#     FUN         
+#     FUN
 # </user>"
 # xml_lexer "xml" "<user></user>"
 
@@ -32,4 +32,4 @@ data="$(cat "../test_data/basic.xml")"
 xml_lexer "xml" "$data"
 
 xml_tokens_debug "xml"
-echo "$map" > data
+echo "$map" >data
