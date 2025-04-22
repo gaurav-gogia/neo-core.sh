@@ -1,40 +1,60 @@
 #!/bin/sh
 
 json_parse() {
-    list="$1"
-    json_object=""
+    tokens="$1"
+    current="$tokens"
+    json_obj=""
     json_key=""
-    json_mode="KEY"
+    mode="EXPECT_KEY"
 
-    curr="$list"
+    root="$json_obj"
 
-    while [ -n "$curr" ]; do
-        value="$(object_get "$curr" "value")"
+    while [ -n "$current" ]; do
+        token="$(object_get "$current" "value")"
 
-        case "$value" in
+        case "$token" in
         '{')
-            [ -n "$json_key" ] && object_set "$parent" "$json_key" "$json_object"
-            parent="$json_object"
-            json_key=""
+            [ -n "$json_key" ] && object_set "$json_obj" "$json_key" "$child"
+            object_set_pointer "$child" "$json_obj" # set parent
+            json_obj="$child"
+            mode="EXPECT_KEY"
             ;;
+
         '}')
-            parent="$(object_get "$parent" "parent")"
+            # Return to parent object
+            parent="$(object_get_pointer "$json_obj")"
+            [ -n "$parent" ] && json_obj="$parent"
             ;;
+
         ':')
-            json_mode="VALUE"
+            mode="EXPECT_VALUE"
             ;;
+
         ',')
-            json_mode="KEY"
+            mode="EXPECT_KEY"
             ;;
+
         *)
-            if [ "$json_mode" = "KEY" ]; then
-                json_key="$value"
-            else
-                object_set "$parent" "$json_key" "$value"
-                json_mode="KEY"
-            fi
+            case "$mode" in
+            "EXPECT_KEY")
+                json_key="${token%\"}"
+                json_key="${json_key#\"}"
+                ;;
+
+            "EXPECT_VALUE")
+                value="${token%\"}"
+                value="${value#\"}"
+
+                object_set "$json_obj" "$json_key" "$value"
+                mode="EXPECT_KEY"
+                ;;
+            esac
             ;;
         esac
-        curr="$(object_get_pointer "$curr")"
+
+        current="$(object_get_pointer "$current")"
     done
+
+    # Return root object
+    printf "%s" "$root"
 }

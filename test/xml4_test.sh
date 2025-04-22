@@ -18,16 +18,10 @@ import() {
     fi
 }
 
-import "../core/map.sh"
-import "../core/obj.sh"
-import "../core/ll.sh"
-import "../json/json_lexer.sh"
-import "../json/json_parser.sh"
+import "../xml/xml4.sh"
 
-json_input='{ "name": "Shepard" }'
+data="$(cat "../test_data/tom.xml")"
+xml_lexer "xml" "$data"
 
-json_lexer "json_tokens" "$json_input"
-json_parse "json_tokens"
-
-list_iterate "json_tokens"
-echo "$map" >data
+xml_tokens_debug "xml"
+echo "$map" >"./xml4_data"

@@ -20,7 +20,7 @@ import() {
 
 import "../xml/xml1.sh"
 
-# data="$(cat "../test_data/core.xml")"
+data="$(cat "../test_data/core.xml")"
 # xml_lexer "xml" "$data"
 # xml_lexer "xml" "<user blin="catfun" ok=1>
 #     OK
@@ -28,7 +28,7 @@ import "../xml/xml1.sh"
 # </user>"
 # xml_lexer "xml" "<user></user>"
 
-data="$(cat "../test_data/basic.xml")"
+# data="$(cat "../test_data/web.xml")"
 xml_lexer "xml" "$data"
 
 xml_tokens_debug "xml"

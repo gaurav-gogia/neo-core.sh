@@ -18,12 +18,18 @@ import() {
     fi
 }
 
-import "../xml/xml2.sh"
+import "../xml/xml3.sh"
 import "../core/util.sh"
 
 data="$(cat "../test_data/tom.xml")"
-data="$(sanitize_xml "$data")"
-xml_lexer "xml" "$data"
+data="$(sanitize_xml_1 "$data")"
+while IFS= read -r line; do
+    [ -z "$line" ] && continue # Skip empty lines
+    xml_lexer "xml" "$line"
+    echo "$line"
+done <<EOF
+$(printf "%s" "$data")
+EOF
 
 xml_tokens_debug "xml"
-echo "$map" >data
+echo "$map" >"./xml3_data"

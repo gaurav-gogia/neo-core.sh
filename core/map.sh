@@ -14,7 +14,7 @@ map_set() {
   ms_key="$1"
   value="$2"
 
-  value="${value//$'\n'/␤}"  # Replace newlines with ␤
+  value="$(printf "%s" "$value" | sed 's/\n/␤/g')"
   map_key_exists "$ms_key" && map_del "$ms_key"
   map="$(printf "%s\n%s=%s" "$map" "$ms_key" "$value")"
 }
@@ -23,15 +23,14 @@ map_get() {
 
   printf "%s\n" "$map" | {
     grep "^${mg_key}=" | {
-      IFS='=' read -r k v && printf "%s\n" "${v//␤/$'\n'}"
+      IFS='=' read -r k v && printf "%s\n" "$(printf "%s" "$v" | sed 's/␤/\n/g')"
     } || return 1
   }
 }
 
-
 keys() {
   printf "keys:\n"
-  printf "$map" | {
+  printf "%s" "$map" | {
     while IFS='=' read -r k v || [ -n "$k" ]; do
       [ -z "$k" ] && continue
       printf "%s\n" "$k"
@@ -40,8 +39,8 @@ keys() {
 }
 values() {
   printf "values:\n"
-  printf "$map" | {
-    while IFS='=' read -r k v || [ -n "$v" ] ; do
+  printf "%s" "$map" | {
+    while IFS='=' read -r k v || [ -n "$v" ]; do
       [ -z "$v" ] && continue
       printf "%s\n" "$v"
     done
