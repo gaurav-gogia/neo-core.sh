@@ -21,15 +21,27 @@ import() {
 import "../xml/xml3.sh"
 import "../core/util.sh"
 
-data="$(cat "../test_data/tom.xml")"
-data="$(sanitize_xml_1 "$data")"
-while IFS= read -r line; do
-    [ -z "$line" ] && continue # Skip empty lines
-    xml_lexer "xml" "$line"
-    echo "$line"
-done <<EOF
-$(printf "%s" "$data")
-EOF
+find_tag_pairs() {
+    file="$1"
+    tag="$2"
 
-xml_tokens_debug "xml"
-echo "$map" >"./xml3_data"
+    start_lines=$(grep -n "<${tag}\([ >/]\|$\)" "$file" | cut -d: -f1)
+    end_lines=$(grep -n -E "<${tag}[^>]*/>|</${tag}>" "$file" | cut -d: -f1)
+
+    set -- $start_lines
+    for start in "$@"; do
+        set -- $end_lines
+        end="$1"
+        [ -z "$start" ] || [ -z "$end" ] && break
+        printf "Start: %s End: %s\n" "$start" "$end"
+        shift
+        end_lines="$*"
+    done
+}
+find_tag_pairs "../test_data/web.xml" "web-app"
+
+# data="$(cat "../test_data/basic.xml")"
+# xml_lexer_partial "$data" "request-character-encoding"
+
+# xml_tokens_debug "xml"
+# echo "$map" >"./xml3_data"

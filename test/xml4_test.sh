@@ -20,7 +20,7 @@ import() {
 
 import "../xml/xml4.sh"
 
-data="$(cat "../test_data/tom.xml")"
+data="$(cat "../test_data/basic.xml")"
 xml_lexer "xml" "$data"
 
 xml_tokens_debug "xml"
